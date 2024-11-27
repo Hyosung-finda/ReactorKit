@@ -22,9 +22,11 @@ public protocol View: AnyObject {
   associatedtype Reactor: ReactorKit.Reactor
 
   /// A dispose bag. It is disposed each time the `reactor` is assigned.
+  @MainActor
   var disposeBag: DisposeBag { get set }
 
   /// A view's reactor. `bind(reactor:)` gets called when the new value is assigned to this property.
+  @MainActor
   var reactor: Reactor? { get set }
 
   /// Creates RxSwift bindings. This method is called each time the `reactor` is assigned.
@@ -46,12 +48,14 @@ public protocol View: AnyObject {
   /// ```
   ///
   /// - warning: It's not recommended to call this method directly.
+  @MainActor
   func bind(reactor: Reactor)
 }
 
 // MARK: - Default Implementations
 
 extension View {
+  @MainActor
   public var reactor: Reactor? {
     get { MapTables.reactor.value(forKey: self) as? Reactor }
     set {
